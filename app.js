@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', routes);
 app.use('/token', require('./app/token/token-controller'));
 app.use('/users', require('./app/user/user-controller'));
+app.use('/robots', require('./app/robot/robot-controller'));
 app.use('/messages', require('./app/message/message-controller'));
 app.use('/documents', require('./app/document/document-controller'));
 
