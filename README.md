@@ -1,5 +1,5 @@
 telep3
------------
+======================
 
 This is version 3 of the telep server. This particular version is developed
 using the MEAN Stack (Mongo, Express, Angular2 and Node).
@@ -11,7 +11,7 @@ web page was for controlling minion.
 I'm very excited.
 
 Installing and Running
-======================
+-----------
 
 I'm going to assume you have Node.js, Mongo, etc installed.
 
