@@ -1,7 +1,7 @@
 module.exports = (function() {
 
   var mod = {
-    jwtSecret: '4OMeg5Z1dMji'
+    jwtSecret: 'fDc3WpMlXJvFvDTom1V2v0XkcRSX07'
   };
 
   return mod;

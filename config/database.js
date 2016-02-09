@@ -6,7 +6,7 @@ module.exports = ( () => {
   mongoose.Promise = global.Promise;
 
   var mod = {
-    url: "mongodb://localhost/meanStackSPA"
+    url: "mongodb://localhost/telep3"
   };
 
   return mod;
