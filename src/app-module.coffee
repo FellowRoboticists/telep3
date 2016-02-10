@@ -28,5 +28,6 @@ angular
     "app.errors",
     "app.login",
     "app.user",
-    "app.document"
+    "app.document",
+    "app.robot"
   ])

@@ -1,0 +1,51 @@
+<form
+  name="editRobot"
+  ng-submit="robotCtrl.save(robotCtrl.robot)">
+
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-8">
+      <div 
+        class="form-group"
+        ng-class="{'has-error':editRobot.name.$invalid && editRobot.name.$touched}">
+        <label
+          for="robot-name"
+          class="control-label">
+          Robot Name *
+        </label>
+        <input required
+          autocomplete="off"
+          id="robot-name"
+          type="text"
+          class="form-control"
+          name="name"
+          ng-model="robotCtrl.robot.name">
+        <div
+          class="messages"
+          ng-messages="editRobot.name.$error"
+          ng-if="editRobot.name.$touched">
+          <div class="help-block" ng-message="required">Name is required</div>
+        </div>
+      </div>
+      <div
+        class="form-group">
+        <label
+          for="robot-public-key"
+          class="control-label">
+          Public Key
+        </label>
+        <textarea 
+          rows="5" 
+          cols="60"
+          id="robot-public-key"
+          class="form-control"
+          name="publicKey"
+          ng-model="robotCtrl.robot.publicKey"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    ng-disabled="editRobot.$invalid"
+    class="btn btn-primary">Save</button>
+</form>

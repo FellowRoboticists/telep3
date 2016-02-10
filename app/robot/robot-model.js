@@ -21,6 +21,19 @@ var RobotSchema = new Schema({
   }
 });
 
+// Deal with the toJSON transformation
+RobotSchema.options.toJSON = {
+
+  transform: (doc, ret, options) => {
+    ret.id = ret._id;
+    delete ret.__v;
+    delete ret._id;
+
+    return ret;
+  }
+  
+};
+
 RobotSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   if (! this.createdAt) {

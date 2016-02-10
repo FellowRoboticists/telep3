@@ -19,15 +19,18 @@ module.exports = (() => {
   };
 
   const deleteRobot = (robot) => {
-    return Document.remove({ _id: robot._id });
+    return Robot.remove({ _id: robot._id });
   };
 
   var mod = {
 
-    getRobotList: getRobotList
+    getRobotList: getRobotList,
+    createRobot: createRobot,
+    updateRobot: updateRobot,
+    deleteRobot: deleteRobot
 
   };
 
   return mod;
 
-});
+}());
