@@ -77,8 +77,8 @@ app.use(function(err, req, res, next) {
 // Start up the beanstalk queuing
 queueSVC.connect('listener', config.beanstalk.host, config.beanstalk.port).
   then( () => {
-    console.log("Starting to listen on messageQueue");
-    queueSVC.processJobsInTube('listener', 'messageQueue', messageSVC.messageQueueWorker).
+    console.log("Starting to listen on robotQueue");
+    queueSVC.processJobsInTube('listener', 'robotQueue', messageSVC.robotQueueWorker).
       then( () => console.log("--") );
   });
 

@@ -11,8 +11,14 @@ module.exports = (() => {
     });
   };
 
+  const robotQueueWorker = (job) => {
+    socketIO.sockets.emit('robot:message', job.payload);
+    return Promise.resolve();
+  };
+
   var mod = {
-    messageQueueWorker: messageQueueWorker
+    messageQueueWorker: messageQueueWorker,
+    robotQueueWorker: robotQueueWorker
   };
 
   return mod;
