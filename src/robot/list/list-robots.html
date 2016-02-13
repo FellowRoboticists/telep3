@@ -36,6 +36,7 @@
       <tr>
         <th sort-column="'name'">Name</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -50,6 +51,14 @@
             tooltip-placement="right"
             href="#/robots/{{robot.id}}/edit">
             {{robot.name}}
+          </a>
+        </td>
+        <td class="center">
+          <a
+            uib-tooltip="Control robot"
+            tooltip-placement="right"
+            href="#/robots/{{robot.id}}/control">
+            <span class="glyphicon glyphicon-road"></span>
           </a>
         </td>
         <td class="center">

@@ -1,6 +1,7 @@
 module.exports = (() => {
 
   const Robot = require('./robot-model');
+  const queueSVC = require('../utility/queue-service');
 
   const getRobotList = () => {
     return Robot.find({});
@@ -22,12 +23,17 @@ module.exports = (() => {
     return Robot.remove({ _id: robot._id });
   };
 
+  const controlRobot = (robot, robotParams) => {
+    return queueSVC.queueJob('talker', robot.name, 100, 0, 300, JSON.stringify(robotParams))
+  };
+
   var mod = {
 
     getRobotList: getRobotList,
     createRobot: createRobot,
     updateRobot: updateRobot,
-    deleteRobot: deleteRobot
+    deleteRobot: deleteRobot,
+    controlRobot: controlRobot
 
   };
 

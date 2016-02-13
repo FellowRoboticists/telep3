@@ -45,6 +45,16 @@ router.put('/:robot',
     catch( next );
 });
 
+router.put('/:robot/control',
+           tokenMW.processJWTToken,
+           tokenMW.verifyAuthenticated,
+           (req, res, next) => {
+
+  robotCTX.controlRobot(req.robot, req.body).
+    then( (robot) => res.json(robot) ).
+    catch( next );
+});
+
 router.delete('/:robot',
            tokenMW.processJWTToken,
            tokenMW.verifyAuthenticated,
