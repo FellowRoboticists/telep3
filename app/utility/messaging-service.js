@@ -16,9 +16,15 @@ module.exports = (() => {
     return Promise.resolve();
   };
 
+  const telepWorker = (job) => {
+    socketIO.sockets.emit('robot:message', job.payload);
+    return Promise.resolve();
+  };
+
   var mod = {
     messageQueueWorker: messageQueueWorker,
-    robotQueueWorker: robotQueueWorker
+    robotQueueWorker: robotQueueWorker,
+    telepWorker: telepWorker
   };
 
   return mod;

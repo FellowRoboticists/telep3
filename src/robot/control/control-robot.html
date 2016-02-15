@@ -1,4 +1,21 @@
-<h3>I am the robot control page</h3>
+<page-header
+  header="Robot Control"
+  back="#/robots"
+  back-label="Back to Robots List">
+  <header-actions>
+    <button 
+      ng-if="!robotCtrl.robot.tubeConnected" 
+      class="btn btn-default"
+      ng-click="robotCtrl.connectTube(robotCtrl.robot.name)">
+      Connect Tube
+    </button>
+  </header-actions>
+</page-header>
+
+<notifications></notifications>
+
+<p ng-if="robotCtrl.robot.tubeConnected">Tube is connected for this robot.</p> 
+<p ng-if="!robotCtrl.robot.tubeConnected">Tube is not connected for this robot.</p> 
 
 <div>
   Current command: {{robotCtrl.lastCommand}}

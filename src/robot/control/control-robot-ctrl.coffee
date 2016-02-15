@@ -4,11 +4,31 @@ angular
 
   .module( "app.robot" )
 
-  .controller( "ControlRobotCtrl", ($scope, hotkeys, $state, $http) ->
+  .controller( "ControlRobotCtrl", ($scope, hotkeys, $state, $http, Robot) ->
 
     vm = @
 
     vm.lastCommand = ""
+
+    Robot
+      .get($state.params.robotId)
+      .then( (robot) ->
+        vm.robot = robot
+      ,(error) ->
+        NotificationsFactory.error(
+          $interpolate(MESSAGES.CRUD.ERROR.RETRIEVE)({name:"Robot"})
+        )
+        $state.go("app.robots.list")
+      )
+
+    vm.connectTube = (robotName) ->
+      $http
+        .put("/robots/#{$state.params.robotId}/tube", { tubeName: robotName })
+        .then( (response) ->
+          vm.robot.tubeConnected = true
+        ,(error) ->
+          console.log("Error: %j", error)
+        )
 
     vm.robotMove = (movement) ->
       vm.lastCommand = movement

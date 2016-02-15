@@ -4,6 +4,8 @@ const router = express.Router();
 const robotCTX = require('./robot-context');
 const tokenMW = require('../token/token-middleware');
 const robotMW = require('./robot-middleware');
+const queueSVC = require('../utility/queue-service');
+const msgSVC = require('../utility/messaging-service');
 
 router.param('robot', robotMW.robotParam);
 
@@ -22,7 +24,10 @@ router.get('/:robot',
            tokenMW.verifyAuthenticated,
            (req, res, next) => {
 
-  res.json(req.robot);
+  var robotClone = JSON.parse(JSON.stringify(req.robot));
+  robotClone.tubeConnected = queueSVC.hasConnection(robotClone.name);
+
+  res.json(robotClone);
 });
 
 router.post('/',
@@ -42,6 +47,26 @@ router.put('/:robot',
 
   robotCTX.updateRobot(req.robot, req.body).
     then( (robot) => res.json(robot) ).
+    catch( next );
+});
+
+router.put('/:robot/tube',
+           tokenMW.processJWTToken,
+           tokenMW.verifyAuthenticated,
+           (req, res, next) => {
+
+  var robotClone = JSON.parse(JSON.stringify(req.robot));
+
+  queueSVC.connect(robotClone.name, config.beanstalk.host, config.beanstalk.port).
+    then( () => {
+      console.log("Startig to listen on: %j", robotClone.name);
+      queueSVC.processJobsInTube(robotClone.name, robotClone.name, msgSVC.telepWorker).
+        then( () => {
+          robotClone.tubeConnected = queueSVC.hasConnection(robotClone.name);
+
+          res.json(robotClone);
+        })
+    }).
     catch( next );
 });
 

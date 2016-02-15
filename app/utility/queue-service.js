@@ -36,6 +36,10 @@ module.exports = (() => {
     });
   };
 
+  const hasConnection = (whichConnection) => {
+    return !!connectedClients[whichConnection];
+  };
+
   const useTube = (whichConnection, tubeName) => {
     var connection = connectionName(whichConnection);
 
@@ -156,7 +160,8 @@ module.exports = (() => {
     watchTube: watchTube,
     deleteJob: deleteJob,
     processJobsInTube: processJobsInTube,
-    reserveJob: reserveJob
+    reserveJob: reserveJob,
+    hasConnection: hasConnection
   };
 
   return mod;
