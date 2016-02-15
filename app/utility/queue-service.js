@@ -150,6 +150,28 @@ module.exports = (() => {
       });
   };
 
+  const processRobotJobsInTube = (whichConnection, tubeName, workObj) => {
+    var connection = connectionName(whichConnection);
+
+    return watchTube(connection, tubeName).
+      then( (numWatched) => reserveJob(connection) ).
+      then( (job) => workObj.process(job).  
+           then( () => deleteJob(connection, job.id) ).
+           catch( (err) => {
+            deleteJob(job.id).
+              then( () => console.log(err.stack) );
+          })
+      ).
+      then( () => {
+        // Do it again...
+        process.nextTick( () => processRobotJobsInTube(connection, tubeName, workObj) );
+      }).
+      catch( (err) => {
+        console.log(err.stack);
+        process.nextTick( () => processRobotJobsInTube(connection, tubeName, workObj) );
+      });
+  };
+
   const mod = {
     connect: connect,
     listTubes: listTubes,
@@ -160,6 +182,7 @@ module.exports = (() => {
     watchTube: watchTube,
     deleteJob: deleteJob,
     processJobsInTube: processJobsInTube,
+    processRobotJobsInTube: processRobotJobsInTube,
     reserveJob: reserveJob,
     hasConnection: hasConnection
   };

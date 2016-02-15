@@ -59,8 +59,11 @@ router.put('/:robot/tube',
 
   queueSVC.connect(robotClone.name, config.beanstalk.host, config.beanstalk.port).
     then( () => {
-      console.log("Startig to listen on: %j", robotClone.name);
-      queueSVC.processJobsInTube(robotClone.name, robotClone.name, msgSVC.telepWorker).
+      console.log("Starting to listen on: %j", robotClone.name);
+      queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, { robotName: robotClone.name, process: (job) => {
+        socketIO.sockets.emit('robot:message', job.payload);
+        return Promise.resolve();
+      }} ).
         then( () => {
           robotClone.tubeConnected = queueSVC.hasConnection(robotClone.name);
 
