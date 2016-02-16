@@ -4,7 +4,7 @@ angular
 
   .module( "app.robot" )
 
-  .controller( "ControlRobotCtrl", ($scope, hotkeys, $state, $http, Robot) ->
+  .controller( "ControlRobotCtrl", ($scope, hotkeys, $state, $http, Robot, NotificationsFactory) ->
 
     vm = @
 
@@ -25,7 +25,9 @@ angular
       $http
         .put("/robots/#{$state.params.robotId}/tube", { tubeName: robotName })
         .then( (response) ->
-          vm.robot.tubeConnected = true
+          console.log("Robot response: %j", response.data)
+          vm.robot = new Robot(response.data)
+          # vm.robot.tubeConnected = true
         ,(error) ->
           console.log("Error: %j", error)
         )

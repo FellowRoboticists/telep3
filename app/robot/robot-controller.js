@@ -5,7 +5,6 @@ const robotCTX = require('./robot-context');
 const tokenMW = require('../token/token-middleware');
 const robotMW = require('./robot-middleware');
 const queueSVC = require('../utility/queue-service');
-const robotSVC = require('../robot/robot-service');
 
 router.param('robot', robotMW.robotParam);
 
@@ -55,18 +54,8 @@ router.put('/:robot/tube',
            tokenMW.verifyAuthenticated,
            (req, res, next) => {
 
-  var robotClone = JSON.parse(JSON.stringify(req.robot));
-
-  queueSVC.connect(robotClone.name, config.beanstalk.host, config.beanstalk.port).
-    then( () => {
-      console.log("Starting to listen on: %j", robotClone.name);
-      queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, Object.create(robotSVC.RobotWorker, { name: { value: robotClone.name } })).
-        then( () => {
-          robotClone.tubeConnected = queueSVC.hasConnection(robotClone.name);
-
-          res.json(robotClone);
-        });
-    }).
+  robotCTX.startRobotTube(req.robot).
+    then( (robotClone) => res.json(robotClone) ).
     catch( next );
 });
 
