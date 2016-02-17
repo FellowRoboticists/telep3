@@ -33,7 +33,7 @@ module.exports = (() => {
     var robotClone = JSON.parse(JSON.stringify(robot));
     return queueSVC.connect(robotClone.name, config.beanstalk.host, config.beanstalk.port).
       then( () => {
-        queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, new RobotWorker(robotClone.name)).
+        queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, new RobotWorker(robotClone)).
           then( () => {
           });
 

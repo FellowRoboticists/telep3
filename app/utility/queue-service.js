@@ -136,7 +136,7 @@ module.exports = (() => {
       then( (job) => workJob(job).  
            then( () => deleteJob(connection, job.id) ).
            catch( (err) => {
-            deleteJob(job.id).
+            deleteJob(connection, job.id).
               then( () => console.log(err.stack) );
           })
       ).
@@ -155,19 +155,24 @@ module.exports = (() => {
 
     return watchTube(connection, tubeName).
       then( (numWatched) => reserveJob(connection) ).
-      then( (job) => workObj.process(job).  
-           then( () => deleteJob(connection, job.id) ).
-           catch( (err) => {
-            deleteJob(job.id).
-              then( () => console.log(err.stack) );
-          })
-      ).
+      then( (job) => {
+        return workObj.process(job).  
+          then( () => {
+            return deleteJob(connection, job.id) 
+          }).
+          catch( (err) => {
+            return deleteJob(connection, job.id).
+              then( () => {
+                throw err;
+              });
+          });
+      }).
       then( () => {
         // Do it again...
         process.nextTick( () => processRobotJobsInTube(connection, tubeName, workObj) );
       }).
       catch( (err) => {
-        console.log(err.stack);
+        console.log((err.stack) ? err.stack : err);
         process.nextTick( () => processRobotJobsInTube(connection, tubeName, workObj) );
       });
   };

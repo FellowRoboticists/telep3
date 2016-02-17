@@ -1,12 +1,22 @@
-var RobotWorker = function(name) {
+var jwt = require('jsonwebtoken');
+var Robot = require('./robot-model');
 
-  this.name = name;
+var RobotWorker = function(robot) {
+
+  this.robot = robot;
 
   this.process = function(job) {
-    console.log("Tube name: %j", this.name);
-    socketIO.sockets.emit('robot:message', job.payload);
-    return Promise.resolve();
-  }
+    console.log("Tube name: %j", this.robot.name);
+    return new Promise( (resolve, reject) => {
+      var payload = jwt.verify(job.payload, this.robot.publicKey, (err, payload) => {
+        if (err) { return reject(err) }
+
+        socketIO.sockets.emit('robot:message', JSON.stringify(payload));
+        resolve();
+      });
+    });
+  };
+
 };
 
 module.exports = RobotWorker;
