@@ -4,6 +4,24 @@ module.exports = (() => {
   const queueSVC = require('../utility/queue-service');
   // const robotSVC = require('../robot/robot-service');
   const RobotWorker = require('../robot/robot-worker');
+  const jwt = require('jsonwebtoken');
+  const fs = require('fs');
+
+  var __privateKey = null;
+
+  const __getPrivateKey = () => {
+    return new Promise( (resolve, reject) => {
+      if (! __privateKey ){
+        fs.readFile(config.secrets.telepPrivateKey, 'utf8', (err, key) => {
+          if (err) { return reject(err) }
+          __privateKey = key;
+          resolve(key);
+        });
+      } else {
+        resolve(__privateKey);
+      }
+    });
+  };
 
   const getRobotList = () => {
     return Robot.find({});
@@ -26,7 +44,11 @@ module.exports = (() => {
   };
 
   const controlRobot = (robot, robotParams) => {
-    return queueSVC.queueJob('talker', robot.name + 'Command', 100, 0, 300, JSON.stringify(robotParams))
+    return __getPrivateKey().
+      then( (privateKey) => {
+        const token = jwt.sign(robotParams, privateKey, { algorithm: config.secrets.jwtAlgorithm });
+        return queueSVC.queueJob('talker', robot.name + 'Command', 100, 0, 300, token);
+      });
   };
 
   const startRobotTube = (robot) => {
