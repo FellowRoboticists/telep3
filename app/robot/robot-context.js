@@ -2,7 +2,8 @@ module.exports = (() => {
 
   const Robot = require('./robot-model');
   const queueSVC = require('../utility/queue-service');
-  const robotSVC = require('../robot/robot-service');
+  // const robotSVC = require('../robot/robot-service');
+  const RobotWorker = require('../robot/robot-worker');
 
   const getRobotList = () => {
     return Robot.find({});
@@ -32,9 +33,7 @@ module.exports = (() => {
     var robotClone = JSON.parse(JSON.stringify(robot));
     return queueSVC.connect(robotClone.name, config.beanstalk.host, config.beanstalk.port).
       then( () => {
-        queueSVC.processRobotJobsInTube(robotClone.name, 
-                                               robotClone.name, 
-                                               Object.create(robotSVC.RobotWorker, { name: { value: robotClone.name } })).
+        queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, new RobotWorker(robotClone.name)).
           then( () => {
           });
 
