@@ -1,5 +1,5 @@
-var jwt = require('jsonwebtoken');
-var Robot = require('./robot-model');
+const jwt = require('jsonwebtoken');
+const Robot = require('./robot-model');
 
 var RobotWorker = function(robot) {
 
