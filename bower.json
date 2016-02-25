@@ -15,15 +15,15 @@
     "tests"
   ],
   "devDependencies": {
-    "angular": "1.4.8",
-    "angular-messages": "1.4.8",
-    "angular-sanitize": "1.4.8",
-    "angular-mocks": "1.4.8",
+    "angular": "1.5.0-rc.0",
+    "angular-messages": "1.5.0-rc.0",
+    "angular-sanitize": "1.5.0-rc.0",
+    "angular-mocks": "1.5.0-rc.0",
     "angular-locker": "2.0.3",
     "angular-ui-router": "0.2.15",
     "angular-socket-io": "~0.7.0",
     "angular-bootstrap": "0.14.3",
-    "angular-cookies": "1.4.8",
+    "angular-cookies": "1.5.0-rc.0",
     "angular-rails-resource": "2.0.0",
     "angular-file-upload": "2.2.0",
     "angular-validation-match": "1.5.2",
@@ -33,5 +33,9 @@
     "bootstrap": "3.3.6",
     "autofill-event": "1.0.0",
     "ng-device-detector": "2.0.2"
+  },
+  "resolutions": {
+    "angular": "1.5.0-rc.0",
+    "angular-cookies": "1.5.0-rc.0"
   }
 }

@@ -9,7 +9,7 @@ angular
     #
     # Message from the robot
     #
-    socket.on("robot:message", (messageObj) ->
+    socket.on("robot:messages", (messageObj) ->
       obj = JSON.parse(messageObj)
       $log.debug "Received a robot message #{obj}"
       NotificationsFactory.info("Message from robot: #{obj.name}")
