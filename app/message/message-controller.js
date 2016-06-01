@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 
-const queueSVC = require('../utility/queue-service')
+const queueSVC = require('robot-queue-service')
 
 /**
  * POST /messages

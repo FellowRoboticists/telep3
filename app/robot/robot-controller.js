@@ -6,7 +6,7 @@ const router = express.Router()
 const robotCTX = require('./robot-context')
 const tokenMW = require('../token/token-middleware')
 const robotMW = require('./robot-middleware')
-const queueSVC = require('../utility/queue-service')
+const queueSVC = require('robot-queue-service')
 
 router.param('robot', robotMW.robotParam)
 

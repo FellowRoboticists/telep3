@@ -2,7 +2,7 @@
 
 module.exports = (function () {
   const Robot = require('./robot-model')
-  const queueSVC = require('../utility/queue-service')
+  const queueSVC = require('robot-queue-service')
   const RobotWorker = require('../robot/robot-worker')
   const jwt = require('jsonwebtoken')
   const fs = require('fs')

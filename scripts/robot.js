@@ -8,7 +8,7 @@
 
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-const queueSVC = require('../app/utility/queue-service')
+const queueSVC = require('robot-queue-service')
 const beanstalk = require('../config/beanstalk')
 
 let __privateKey = null

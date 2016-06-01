@@ -4,7 +4,7 @@
 const program = require('commander')
 const async = require('async')
 
-const queue = require('../app/utility/queue-service')
+const queue = require('robot-queue-service')
 
 program
   .version('0.0.1')
