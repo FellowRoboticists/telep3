@@ -1,0 +1,121 @@
+router                                                                                                         
+ ├── query                                         *                                                           
+ ├── expressInit                                   *                                                           
+ ├── favicon                                       *                                                           
+ ├── logger                                        *                                                           
+ ├── jsonParser                                    *                                                           
+ ├── urlencodedParser                              *                                                           
+ ├── cookieParser                                  *                                                           
+ ├── serveStatic                                   *                                                           
+ ├── router                                        /^\/token\/?(?=\/|$)/                                       
+ │   router                                                                                                    
+ │    ├── bound dispatch                           /                                                           POST
+ │    │    └── __checkCredentials                  /                                                           POST
+ │    │   
+ │    └── bound dispatch                           /                                                           DELETE
+ │         └── __performLogout                     /                                                           DELETE
+ │        
+ │   
+ ├── router                                        /^\/users\/?(?=\/|$)/                                       
+ │   router                                                                                                    
+ │    ├── bound dispatch                           /                                                           GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __verifyAuthenticated               /                                                           GET
+ │    │    └── __getUsers                          /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /:user                                                      GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __verifyAuthenticated               /                                                           GET
+ │    │    └── __getUser                           /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /                                                           POST
+ │    │    ├── __processJWTToken                   /                                                           POST
+ │    │    ├── __verifyAuthenticated               /                                                           POST
+ │    │    ├── __verifyRequest                     /                                                           POST
+ │    │    └── __createUser                        /                                                           POST
+ │    │   
+ │    ├── bound dispatch                           /:user                                                      PUT
+ │    │    ├── __processJWTToken                   /                                                           PUT
+ │    │    ├── __verifyAuthenticated               /                                                           PUT
+ │    │    ├── __verifyRequest                     /                                                           PUT
+ │    │    └── __updateUser                        /                                                           PUT
+ │    │   
+ │    └── bound dispatch                           /:user                                                      DELETE
+ │         ├── __processJWTToken                   /                                                           DELETE
+ │         ├── __verifyAuthenticated               /                                                           DELETE
+ │         ├── __verifyRequest                     /                                                           DELETE
+ │         └── __deleteUser                        /                                                           DELETE
+ │        
+ │   
+ ├── router                                        /^\/robots\/?(?=\/|$)/                                      
+ │   router                                                                                                    
+ │    ├── bound dispatch                           /                                                           GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __verifyAuthenticated               /                                                           GET
+ │    │    └── __getRobotList                      /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /:robot                                                     GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __verifyAuthenticated               /                                                           GET
+ │    │    └── __checkIfRobotConnected             /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /                                                           POST
+ │    │    ├── __processJWTToken                   /                                                           POST
+ │    │    ├── __verifyAuthenticated               /                                                           POST
+ │    │    └── __createRobot                       /                                                           POST
+ │    │   
+ │    ├── bound dispatch                           /:robot                                                     PUT
+ │    │    ├── __processJWTToken                   /                                                           PUT
+ │    │    ├── __verifyAuthenticated               /                                                           PUT
+ │    │    └── __updateRobot                       /                                                           PUT
+ │    │   
+ │    ├── bound dispatch                           /:robot/tube                                                PUT
+ │    │    ├── __processJWTToken                   /                                                           PUT
+ │    │    ├── __verifyAuthenticated               /                                                           PUT
+ │    │    └── __startRobotTube                    /                                                           PUT
+ │    │   
+ │    ├── bound dispatch                           /:robot/control                                             PUT
+ │    │    ├── __processJWTToken                   /                                                           PUT
+ │    │    ├── __verifyAuthenticated               /                                                           PUT
+ │    │    └── __controlRobot                      /                                                           PUT
+ │    │   
+ │    └── bound dispatch                           /:robot                                                     DELETE
+ │         ├── __processJWTToken                   /                                                           DELETE
+ │         ├── __verifyAuthenticated               /                                                           DELETE
+ │         └── __deleteRobot                       /                                                           DELETE
+ │        
+ │   
+ ├── router                                        /^\/messages\/?(?=\/|$)/                                    
+ │   router                                                                                                    
+ │    └── bound dispatch                           /                                                           POST
+ │         └── __queueMessage                      /                                                           POST
+ │        
+ │   
+ ├── router                                        /^\/documents\/?(?=\/|$)/                                   
+ │   router                                                                                                    
+ │    ├── bound dispatch                           /                                                           GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __verifyAuthenticated               /                                                           GET
+ │    │    └── __getDocuments                      /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /:document                                                  GET
+ │    │    ├── __processJWTToken                   /                                                           GET
+ │    │    ├── __handleResourceAccess              /                                                           GET
+ │    │    ├── __verifyDownloadToken               /                                                           GET
+ │    │    └── __downloadDocument                  /                                                           GET
+ │    │   
+ │    ├── bound dispatch                           /                                                           POST
+ │    │    ├── __processJWTToken                   /                                                           POST
+ │    │    ├── __verifyAuthenticated               /                                                           POST
+ │    │    ├── multerMiddleware                    /                                                           POST
+ │    │    └── __uploadDocument                    /                                                           POST
+ │    │   
+ │    └── bound dispatch                           /:document                                                  DELETE
+ │         ├── __processJWTToken                   /                                                           DELETE
+ │         ├── __verifyAuthenticated               /                                                           DELETE
+ │         └── __deleteDocument                    /                                                           DELETE
+ │        
+ │   
+ ├── <anonymous>                                   *                                                           
+ ├── <anonymous>                                   *                                                           
+ └── <anonymous>                                   *                                                           

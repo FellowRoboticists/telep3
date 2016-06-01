@@ -1,8 +1,10 @@
-var gulp = require( "gulp" );
-var flatten = require( "gulp-flatten" );
+'use strict'
 
-gulp.task( "mockData", function(cb){
-  return gulp.src( ["./src/**/*-mock-data.json"] )
-    .pipe( flatten() )
-    .pipe( gulp.dest( "./dist/js" ) )
-});
+const gulp = require('gulp')
+const flatten = require('gulp-flatten')
+
+gulp.task('mockData', function (cb) {
+  return gulp.src(['./src/**/*-mock-data.json'])
+    .pipe(flatten())
+    .pipe(gulp.dest('./dist/js'))
+})

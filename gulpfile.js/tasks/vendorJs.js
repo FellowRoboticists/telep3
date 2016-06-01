@@ -1,16 +1,17 @@
-var config = require( "../config.json" );
-var gulp = require( "gulp" );
-var changed = require( "gulp-changed" );
-var ngAnnotate = require( "gulp-ng-annotate" );
-var concat = require( "gulp-concat" );
-var stripComments = require( "gulp-strip-comments" );
+'use strict'
 
-gulp.task( "vendorJs", function(cb){
+const config = require('../config.json')
+const gulp = require('gulp')
+const changed = require('gulp-changed')
+const ngAnnotate = require('gulp-ng-annotate')
+const concat = require('gulp-concat')
+const stripComments = require('gulp-strip-comments')
 
-  return gulp.src( config.vendor_js_src )
-    .pipe( changed( "./dist/js" ) )
-    .pipe( concat( "vendor.js" ) )
-    .pipe( stripComments({line:true}) )
-    .pipe( ngAnnotate() )
-    .pipe( gulp.dest( "./dist/js" ) )
-});
+gulp.task('vendorJs', function (cb) {
+  return gulp.src(config.vendor_js_src)
+    .pipe(changed('./dist/js'))
+    .pipe(concat('vendor.js'))
+    .pipe(stripComments({line: true}))
+    .pipe(ngAnnotate())
+    .pipe(gulp.dest('./dist/js'))
+})

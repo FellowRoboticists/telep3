@@ -1,14 +1,14 @@
-module.exports = ( () => {
+'use strict'
 
-  var mongoose = require('mongoose');
+module.exports = (function () {
+  const mongoose = require('mongoose')
 
   // Configure mongoose to use the ES6 Promise
-  mongoose.Promise = global.Promise;
+  mongoose.Promise = global.Promise
 
   var mod = {
-    url: "mongodb://localhost/telep3"
-  };
+    url: 'mongodb://localhost/telep3'
+  }
 
-  return mod;
-
-}());
+  return mod
+}())

@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt');
+'use strict'
 
-var UserSchema = new Schema({
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const bcrypt = require('bcrypt')
+
+const UserSchema = new Schema({
 
   name: {
     type: String
@@ -33,58 +35,55 @@ var UserSchema = new Schema({
     type: Date
   }
 
-}, { collection: 'user' });
+}, { collection: 'user' })
 
 // Deal with the toJSON transformation
 UserSchema.options.toJSON = {
 
   transform: (doc, ret, options) => {
-    ret.id = ret._id;
-    delete ret.__v;
-    delete ret.password;
-    delete ret.createdAt;
-    delete ret.updatedAt;
-    delete ret._id;
+    ret.id = ret._id
+    delete ret.__v
+    delete ret.password
+    delete ret.createdAt
+    delete ret.updatedAt
+    delete ret._id
 
-    return ret;
+    return ret
   }
-  
-};
+}
 
 // Add some middleware
 
 // Deal with the createdAt and updatedAt fields
-UserSchema.pre('save', function(next) {
-  this.updatedAt = new Date();
-  if (! this.createdAt) {
-    this.createdAt = this.updatedAt;
+UserSchema.pre('save', function (next) {
+  this.updatedAt = new Date()
+  if (!this.createdAt) {
+    this.createdAt = this.updatedAt
   }
-  next();
-});
+  next()
+})
 
 // Encrypt the user's password
-UserSchema.pre('save', function(next) {
-  var user = this;
+UserSchema.pre('save', function (next) {
+  let user = this
 
   // only hash the password if it has been modified (or is new)
-  if (! user.isModified('password')) { return next(); }
+  if (!user.isModified('password')) return next()
 
   bcrypt.hash(user.password, 10, (err, encryptedPassword) => {
-    if (err) { return next(err); }
-    user.password = encryptedPassword;
-    next();
-  });
-});
-
+    if (err) return next(err)
+    user.password = encryptedPassword
+    next()
+  })
+})
 
 // Now add some methods
-UserSchema.methods.comparePassword = function(password, cb) {
+UserSchema.methods.comparePassword = function (password, cb) {
   bcrypt.compare(password, this.password, (err, valid) => {
-    if (err) { return cb(err); }
-    cb(null, valid);
-  });
-};
+    if (err) return cb(err)
+    cb(null, valid)
+  })
+}
 
-// return mongoose.model('User', userSchema);
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema)
 

@@ -1,7 +1,9 @@
-var gulp  = require( "gulp");
-var shell = require( "gulp-shell" );
+'use strict'
 
-gulp.task( "linkProd", ["unlink"], function(){
-  return gulp.src("")
-    .pipe( shell(["gulpfile.js/scripts/linkProd.sh"]) );
-});
+const gulp = require('gulp')
+const shell = require('gulp-shell')
+
+gulp.task('linkProd', ['unlink'], function () {
+  return gulp.src('')
+    .pipe(shell(['gulpfile.js/scripts/linkProd.sh']))
+})

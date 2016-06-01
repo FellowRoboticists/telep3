@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
+'use strict'
 
-const queueSVC = require('../utility/queue-service');
+const express = require('express')
+const router = express.Router()
+
+const queueSVC = require('../utility/queue-service')
 
 /**
  * POST /messages
@@ -10,11 +12,12 @@ const queueSVC = require('../utility/queue-service');
  *
  * Just a test action
  */
-router.post('/', (req, res, next) => {
-  // socketIO.sockets.emit('user:logged_out', { msg: 'joyful dog' });
-  queueSVC.queueJob('talker', 'messageQueue', 100, 0, 300, 'joyful dog').
-    then( () => res.json({ status: 'sent' }) ).
-    catch(next);
-});
+router.post(
+  '/',
+  function __queueMessage (req, res, next) {
+    queueSVC.queueJob('talker', 'messageQueue', 100, 0, 300, 'joyful dog')
+      .then(() => res.json({ status: 'sent' }))
+      .catch(next)
+  })
 
-module.exports = router;
+module.exports = router

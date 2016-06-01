@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
+'use strict'
 
-const User = require('../user/user-model');
-const tokenMW = require('./token-middleware');
+const express = require('express')
+const router = express.Router()
+
+const User = require('../user/user-model')
+const tokenMW = require('./token-middleware')
 
 /**
  * POST /token
@@ -13,45 +15,47 @@ const tokenMW = require('./token-middleware');
  * This action returns a object: { user: user }. It also sets up the JWT
  * and CSRF cookies.
  */
-router.post('/', (req, res, next) => {
+router.post(
+  '/',
+  function __checkCredentials (req, res, next) {
+    User.findOne({email: req.body.email})
+      .then((user) => {
+        if (!user) return res.status(409).send('Invalid credentials')
+        user.comparePassword(req.body.password, (err, valid) => {
+          if (err) return res.status(409).send('Invalid credentials')
+          if (!valid) return res.status(409).send('Invalid credentials')
+          var obj = { user: user }
 
-  User.findOne({email: req.body.email}).
-    then( (user) => {
-      if (! user) { return res.status(409).send("Invalid credentials"); }
-      user.comparePassword(req.body.password, (err, valid) => {
-        if (err) { return res.status(409).send("Invalid credentials"); }
-        if (! valid) { return res.status(409).send("Invalid credentials"); }
-        var obj = {
-          user: user
-        };
-        // Set up the cookies we need for authentication
-        tokenMW.createJWTToken(user, res);
-        res.json(obj);
-      });
-    }).
-    catch( (err) => {
-      console.log(err.stack);
-      res.status(500).send(err.message);
-    });
-});
+          // Set up the cookies we need for authentication
+          tokenMW.createJWTToken(user, res)
+          res.json(obj)
+        })
+      })
+      .catch((err) => {
+        console.log(err.stack)
+        res.status(500).send(err.message)
+      })
+  })
 
 /**
  * DELETE /token
  *
- * Effectively, this is a login. In general, what it does is to 
+ * Effectively, this is a login. In general, what it does is to
  * clear the JWT and CSRF token cookies.
  *
  * Returns an empty object.
  */
-router.delete('/', (req, res, next) => {
-  // The key thing here is to remove the authentication/CSRF
-  // cookies. Basically, this clears the cookie text and sets
-  // the expiration to something in the past. This will force
-  // the browser to remove these cookies from the domain.
-  res.clearCookie('JWT-TOKEN');
-  res.clearCookie('XSRF-TOKEN');
+router.delete(
+  '/',
+  function __performLogout (req, res, next) {
+    // The key thing here is to remove the authentication/CSRF
+    // cookies. Basically, this clears the cookie text and sets
+    // the expiration to something in the past. This will force
+    // the browser to remove these cookies from the domain.
+    res.clearCookie('JWT-TOKEN')
+    res.clearCookie('XSRF-TOKEN')
 
-  res.json({});
-});
+    res.json({})
+  })
 
-module.exports = router;
+module.exports = router

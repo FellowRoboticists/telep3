@@ -1,16 +1,17 @@
 #!/usr/bin/env node
+'use strict'
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
-var payload = {
+let payload = {
   user_id: 1234,
   csrf_token: 'abcdefghijklmnopqrstuvwxyz'
-};
+}
 
-var token = jwt.sign(payload, 'this is my secret', { expiresIn: 60 * 60 * 24 });
+let token = jwt.sign(payload, 'this is my secret', { expiresIn: 60 * 60 * 24 })
 
-console.log("The token: %j", token);
+console.log('The token: %j', token)
 
-var payload = jwt.decode(token, { complete: true });
+payload = jwt.decode(token, { complete: true })
 
-console.log("The decoded payload: %j", payload);
+console.log('The decoded payload: %j', payload)

@@ -1,35 +1,34 @@
-var gulp = require( "gulp" );
-var runSequence = require( "run-sequence" );
-var revCollector = require( "gulp-rev-collector" );
-var minifyCss = require( "gulp-minify-css" );
-var rev = require( "gulp-rev" );
-var q = require( "q" );
-var concat = require( "gulp-concat" );
+'use strict'
 
-gulp.task( "revCss", function(cb){
+const gulp = require('gulp')
+const runSequence = require('run-sequence')
+const revCollector = require('gulp-rev-collector')
+const minifyCss = require('gulp-minify-css')
+const rev = require('gulp-rev')
+const q = require('q')
 
-  var deferred = q.defer();
+gulp.task('revCss', function (cb) {
+  let deferred = q.defer()
 
-  gulp.task("_rev_css", function(){
-    return gulp.src( ["./dist/css/styles.css"] )
-      .pipe( minifyCss() )
-      .pipe( rev() )
-      .pipe( gulp.dest( "./prod/css" ) )
-      .pipe( rev.manifest( "styles.json" ) )
-      .pipe( gulp.dest( "./dist/rev" ) );
-  });
+  gulp.task('_rev_css', function () {
+    return gulp.src(['./dist/css/styles.css'])
+      .pipe(minifyCss())
+      .pipe(rev())
+      .pipe(gulp.dest('./prod/css'))
+      .pipe(rev.manifest('styles.json'))
+      .pipe(gulp.dest('./dist/rev'))
+  })
 
-  gulp.task("_rev_cssUrls", function(){
-    return gulp.src( ["./dist/rev/styles.json","./prod/index.html"] )
-      .pipe( revCollector() )
-      .pipe( gulp.dest( "./prod/" ) )
-      .on("end", function(){
-        deferred.resolve();
-      });
-  });
+  gulp.task('_rev_cssUrls', function () {
+    return gulp.src(['./dist/rev/styles.json', './prod/index.html'])
+      .pipe(revCollector())
+      .pipe(gulp.dest('./prod/'))
+      .on('end', function () {
+        deferred.resolve()
+      })
+  })
 
-  runSequence( "_rev_css", "_rev_cssUrls" );
+  runSequence('_rev_css', '_rev_cssUrls')
 
-  return deferred.promise;
-
-});
+  return deferred.promise
+})

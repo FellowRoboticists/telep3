@@ -1,6 +1,8 @@
-var gulp = require( "gulp" );
+'use strict'
 
-gulp.task( "copyIndex", function(cb){
-  return gulp.src( "./src/index.html" )
-    .pipe( gulp.dest( "./dist" ) )
-});
+const gulp = require('gulp')
+
+gulp.task('copyIndex', function (cb) {
+  return gulp.src('./src/index.html')
+    .pipe(gulp.dest('./dist'))
+})

@@ -1,6 +1,8 @@
-var gulp = require( "gulp" );
-var del = require( "del" );
+'use strict'
 
-gulp.task( "clean", function(cb){
-  return del( ["./dist/*"], cb );
+const gulp = require('gulp')
+const del = require('del')
+
+gulp.task('clean', function (cb) {
+  return del(['./dist/*'], cb)
 })

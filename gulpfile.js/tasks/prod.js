@@ -1,15 +1,17 @@
-var gulp = require('gulp');
-var runSequence = require("run-sequence");
+'use strict'
 
-gulp.task( "prod", ["default"], function(cb){
+const gulp = require('gulp')
+const runSequence = require('run-sequence')
+
+gulp.task('prod', ['default'], function (cb) {
   return runSequence(
-    "cleanProd",
-    "copyIndexProd",
-    "revCss",
-    "revJs",
-    "revImages",
-    "revFonts",
-    "linkProd",
+    'cleanProd',
+    'copyIndexProd',
+    'revCss',
+    'revJs',
+    'revImages',
+    'revFonts',
+    'linkProd',
     cb
-  );
-});
+  )
+})
