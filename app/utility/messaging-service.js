@@ -1,11 +1,13 @@
 'use strict'
 
 module.exports = (function () {
+  const winston = require('winston')
+
   const messageQueueWorker = (job) => {
     return new Promise((resolve, reject) => {
-      console.log('Processing job: ')
-      console.log(`  Job id: ${job.id}`)
-      console.log(`  Job Payload: ${job.payload}`)
+      winston.log('debug', 'Processing job: ')
+      winston.log('debug', `  Job id: ${job.id}`)
+      winston.log('debug', `  Job Payload: ${job.payload}`)
       socketIO.sockets.emit('user:logged_out', { msg: job.payload })
       resolve()
     })

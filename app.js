@@ -1,17 +1,22 @@
 'use strict'
+
 const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const favicon = require('serve-favicon')
-const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const queueSVC = require('robot-queue-service')
 const messageSVC = require('./app/utility/messaging-service')
 const database = require('./config/database')
 const beanstalk = require('./config/beanstalk')
+const winston = require('winston')
+const expressWinston = require('express-winston')
 
-// require('./bootstrap')
+// Set up the logging level based on the environment
+winston.level = process.env.LOG_LEVEL || 'warn'
+winston.remove(winston.transports.Console)
+winston.add(winston.transports.Console, { json: false })
 
 // ##############################################################
 // Mongoose settings
@@ -23,24 +28,43 @@ mongoose.connect(database.url)
 
 var app = express()
 
+app.use(expressWinston.logger({
+  transports: [
+    new winston.transports.Console({
+      json: false,
+      level: process.env.LOG_LEVEL || 'warn'
+    })
+  ],
+  meta: false, // defaults to true
+  ignoreRoute: function (req, res) { return false }
+}))
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-// app.use('/', routes)
 app.use('/token', require('./app/token/token-controller'))
 app.use('/users', require('./app/user/user-controller'))
 app.use('/robots', require('./app/robot/robot-controller'))
 app.use('/messages', require('./app/message/message-controller'))
 app.use('/documents', require('./app/document/document-controller'))
+
+// Error logger...
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: false
+    })
+  ],
+  meta: false // defaults to true
+}))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -56,7 +80,7 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     if (err.status !== 404) {
-      console.error(err.stack)
+      winston.log('error', err.stack)
     }
     res.status(err.status || 500)
     res.render('error', {
@@ -85,14 +109,14 @@ if (process.env.NODE_ENV === 'development') {
 // Start up the beanstalk queuing
 queueSVC.connect('listener', beanstalk.host, beanstalk.port)
   .then(() => {
-    console.log('Starting to listen on robotQueue')
+    winston.log('info', 'Starting to listen on robotQueue')
     queueSVC.processJobsInTube('listener', 'robotQueue', messageSVC.robotQueueWorker)
-      .then(() => console.log('--'))
+      .then(() => winston.log('debug', '--'))
   })
 
 queueSVC.connect('talker', beanstalk.host, beanstalk.port)
   .then(() => {
-    console.log('Talker ready for speaking')
+    winston.log('info', 'Talker ready for speaking')
   })
 
 module.exports = app

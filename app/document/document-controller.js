@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: '/tmp' })
+const winston = require('winston')
 
 const Document = require('./document-model')
 const tokenMW = require('../token/token-middleware')
@@ -88,7 +89,7 @@ router.post(
         .then((document) => gridSVC.writeToGridFS(document._id.toString(), fileToUpload.path, 'documents')
               .then(() => document))
         .then((u) => res.json(u))
-        .catch((err) => console.log(err.stack))
+        .catch((err) => winston.log('error', err.stack))
     } else {
       // No file upload
       res.json({msg: "You didn't put in a file, dipstick"})

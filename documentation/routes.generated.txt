@@ -1,8 +1,8 @@
 router                                                                                                         
  ├── query                                         *                                                           
  ├── expressInit                                   *                                                           
+ ├── <anonymous>                                   *                                                           
  ├── favicon                                       *                                                           
- ├── logger                                        *                                                           
  ├── jsonParser                                    *                                                           
  ├── urlencodedParser                              *                                                           
  ├── cookieParser                                  *                                                           
@@ -116,6 +116,7 @@ router
  │         └── __deleteDocument                    /                                                           DELETE
  │        
  │   
+ ├── <anonymous>                                   *                                                           
  ├── <anonymous>                                   *                                                           
  ├── <anonymous>                                   *                                                           
  └── <anonymous>                                   *                                                           

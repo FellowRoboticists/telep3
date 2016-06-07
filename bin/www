@@ -7,20 +7,36 @@
 
 var app = require('../app')
 var debug = require('debug')('meanStackSPA:server')
-var http = require('http')
+if (process.env.NODE_ENV === 'development') {
+  const http = require('http')
+  var port = normalizePort(process.env.PORT || '3000')
+  app.set('port', port)
+  var server = http.createServer(app)
+} else {
+  const fs = require('fs')
+  const https = require('https')
+
+  var portValue = '8443'
+  const httpsOptions = {
+    key: fs.readFileSync('/etc/ssl/private/telep3-key.pem'),
+    cert: fs.readFileSync('/etc/ssl/certs/telep3-cert.pem')
+  }
+  var port = normalizePort(process.env.PORT || '8443')
+  app.set('port', port)
+  var server = https.createServer(httpsOptions, app)
+}
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000')
-app.set('port', port)
+// var port = normalizePort(process.env.PORT || '8443')
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app)
 var io = require('socket.io').listen(server)
 
 Object.defineProperty(Object.prototype,

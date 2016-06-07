@@ -5,6 +5,7 @@ const router = express.Router()
 
 const User = require('./user-model')
 const tokenMW = require('../token/token-middleware')
+const winston = require('winston')
 
 /**
  * GET /users
@@ -107,7 +108,7 @@ router.put(
     user.save()
       .then((user) => res.json(user))
       .catch((err) => {
-        console.log(err.stack)
+        winston.log('error', err.stack)
         res.status(500).send(err.message)
       })
   })
