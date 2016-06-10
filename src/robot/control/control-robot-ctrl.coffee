@@ -86,6 +86,12 @@ angular
         callback: ->
           vm.robotMove("slowdown")
       )
+      .add(
+        combo: "c"
+        description: "Connect"
+        callback: ->
+          vm.robotMove("connect")
+      )
 
     return
   )
