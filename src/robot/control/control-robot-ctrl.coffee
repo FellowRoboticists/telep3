@@ -75,13 +75,13 @@ angular
           vm.robotMove("stop")
       )
       .add(
-        combo: "pageup"
+        combo: "u"
         description: "Speed up"
         callback: ->
           vm.robotMove("speedup")
       )
       .add(
-        combo: "pagedown"
+        combo: "d"
         description: "Slow down"
         callback: ->
           vm.robotMove("slowdown")
