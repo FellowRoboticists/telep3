@@ -7,7 +7,6 @@ module.exports = (function () {
   const jwt = require('jsonwebtoken')
   const fs = require('fs')
   const secrets = require('../../config/secrets')
-  const beanstalk = require('../../config/beanstalk')
 
   var __privateKey = null
 
@@ -49,17 +48,17 @@ module.exports = (function () {
     return __getPrivateKey()
       .then((privateKey) => {
         const token = jwt.sign(robotParams, privateKey, { algorithm: secrets.jwtAlgorithm })
-        return queueSVC.queueJob('talker', robot.name + 'Command', 100, 0, 300, token)
+        return queueSVC.sendToQueue('talker', robot.name + 'Command', new Buffer(token))
       })
   }
 
   const startRobotTube = (robot) => {
     let robotClone = JSON.parse(JSON.stringify(robot))
-    return queueSVC.connect(robotClone.name, beanstalk.host, beanstalk.port)
+    return queueSVC.createChannel(robotClone.name)
+      .then((ch) => {
+        return queueSVC.consume(robotClone.name, robotClone.name, new RobotWorker(robotClone))
+      })
       .then(() => {
-        queueSVC.processRobotJobsInTube(robotClone.name, robotClone.name, new RobotWorker(robotClone))
-          .then(() => null)
-
         robotClone.tubeConnected = queueSVC.hasConnection(robotClone.name)
         return robotClone
       })

@@ -3,18 +3,17 @@
 module.exports = (function () {
   const winston = require('winston')
 
-  const messageQueueWorker = (job) => {
+  const messageQueueWorker = (msg) => {
     return new Promise((resolve, reject) => {
       winston.log('debug', 'Processing job: ')
-      winston.log('debug', `  Job id: ${job.id}`)
-      winston.log('debug', `  Job Payload: ${job.payload}`)
-      socketIO.sockets.emit('user:logged_out', { msg: job.payload })
+      winston.log('debug', `  Job Payload: ${msg}`)
+      socketIO.sockets.emit('user:logged_out', { msg: msg })
       resolve()
     })
   }
 
-  const robotQueueWorker = (job) => {
-    socketIO.sockets.emit('robot:message', job.payload)
+  const robotQueueWorker = (msg) => {
+    socketIO.sockets.emit('robot:message', msg)
     return Promise.resolve()
   }
 

@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 const queueSVC = require('robot-queue-service')
 const messageSVC = require('./app/utility/messaging-service')
 const database = require('./config/database')
-const beanstalk = require('./config/beanstalk')
+const rabbit = require('./config/rabbit')
 const winston = require('winston')
 const expressWinston = require('express-winston')
 
@@ -106,17 +106,23 @@ if (process.env.NODE_ENV === 'development') {
   require('express-print-routes')(app, filePath)
 }
 
-// Start up the beanstalk queuing
-queueSVC.connect('listener', beanstalk.host, beanstalk.port)
-  .then(() => {
-    winston.log('info', 'Starting to listen on robotQueue')
-    queueSVC.processJobsInTube('listener', 'robotQueue', messageSVC.robotQueueWorker)
-      .then(() => winston.log('debug', '--'))
+queueSVC.connect(rabbit.url, rabbit.options)
+  .then((conn) => {
+    return queueSVC.createChannel('talker')
+      .then((ch) => {
+        winston.log('info', 'talker channel established')
+        return queueSVC.createChannel('listener')
+          .then((ch) => {
+            winston.log('info', 'listener channel established')
+            return queueSVC.consume('listener', 'robotQueue', messageSVC.robotQueueWorker)
+              .then(() => {
+                winston.log('info', 'listening for robotQueue messages')
+              })
+          })
+      })
   })
-
-queueSVC.connect('talker', beanstalk.host, beanstalk.port)
-  .then(() => {
-    winston.log('info', 'Talker ready for speaking')
+  .catch((err) => {
+    winston.log('error', 'Error: %j', err)
   })
 
 module.exports = app
