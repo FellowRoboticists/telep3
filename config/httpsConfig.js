@@ -5,8 +5,6 @@ module.exports = (function () {
 
   const HTTPS_KEY = '/etc/telep/private/telep3-key.pem'
   const HTTPS_CERT = '/etc/telep/certs/telep3-cert.pem'
-  // const HTTPS_KEY = '/etc/ssl/private/telep3-key.pem'
-  // const HTTPS_CERT = '/etc/ssl/certs/telep3-cert.pem'
   const DEFAULT_PORT = '8443'
 
   var mod = {
