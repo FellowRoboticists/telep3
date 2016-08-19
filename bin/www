@@ -7,26 +7,24 @@
 
 var app = require('../app')
 var debug = require('debug')('meanStackSPA:server')
+
 if (process.env.NODE_ENV === 'development') {
   const http = require('http')
   const httpConfig = require('../config/httpConfig')
 
-  var port = normalizePort(process.env.PORT || '3000')
-  // var port = normalizePort(process.env.PORT || '3000')
+  var port = normalizePort(httpConfig.port)
   app.set('port', port)
   var server = http.createServer(app)
 } else {
-  // const fs = require('fs')
   const https = require('https')
   const httpsConfig = require('../config/httpsConfig')
 
-  // var portValue = '8443'
   const httpsOptions = {
-    key: httpsConfig.key, // fs.readFileSync('/etc/ssl/private/telep3-key.pem'),
-    cert: httpsConfig.cert // fs.readFileSync('/etc/ssl/certs/telep3-cert.pem')
+    key: httpsConfig.key,
+    cert: httpsConfig.cert
   }
+
   var port = normalizePort(httpsConfig.port)
-  // var port = normalizePort(process.env.PORT || '8443')
   app.set('port', port)
   var server = https.createServer(httpsOptions, app)
 }
