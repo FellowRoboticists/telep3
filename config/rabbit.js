@@ -3,9 +3,9 @@
 module.exports = (function () {
   const fs = require('fs')
 
-  const CA_CERT = '/etc/rabbitmq/certs/st-ca.crt'
-  const CLIENT_CERT = '/etc/telep/certs/stc-cert.pem'
-  const CLIENT_KEY = '/etc/telep/private/stc-key.pem'
+  const CA_CERT = process.env.RABBITMQ_CA_CERT
+  const CLIENT_CERT = process.env.TELEP_CLIENT_CERT
+  const CLIENT_KEY = process.env.TELEP_CLIENT_KEY
 
   var mod = {
     url: 'amqps://localhost:5671',

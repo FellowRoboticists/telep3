@@ -3,8 +3,8 @@
 module.exports = (function () {
   const fs = require('fs')
 
-  const HTTPS_KEY = '/etc/telep/private/telep3-key.pem'
-  const HTTPS_CERT = '/etc/telep/certs/telep3-cert.pem'
+  const HTTPS_KEY = process.env.TELEP_HTTPS_KEY
+  const HTTPS_CERT = process.env.TELEP_HTTPS_CERT
   const DEFAULT_PORT = '8443'
 
   var mod = {

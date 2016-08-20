@@ -2,7 +2,7 @@
 
 module.exports = (function () {
   var mod = {
-    telepPrivateKey: '/etc/telep/private/telep_rsa',
+    telepPrivateKey: process.env.TELEP_PRIVATE_KEY,
     jwtAlgorithm: 'RS512',
     jwtSecret: process.env.JWT_SECRET
   }
