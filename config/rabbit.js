@@ -4,8 +4,8 @@ module.exports = (function () {
   const fs = require('fs')
 
   const CA_CERT = '/etc/ssl/certs/st-ca.crt'
-  const CLIENT_CERT = '/home/dsieh/certs/stc-cert.pem'
-  const CLIENT_KEY = '/home/dsieh/certs/stc-key.pem'
+  const CLIENT_CERT = '/etc/telep/certs/stc-cert.pem'
+  const CLIENT_KEY = '/etc/telep/private/stc-key.pem'
 
   var mod = {
     url: 'amqps://localhost:5671',
