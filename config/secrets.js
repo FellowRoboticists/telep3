@@ -2,9 +2,9 @@
 
 module.exports = (function () {
   var mod = {
-    telepPrivateKey: '/etc/ssl/private/telep_rsa',
+    telepPrivateKey: '/etc/telep/private/telep_rsa',
     jwtAlgorithm: 'RS512',
-    jwtSecret: 'fDc3WpMlXJvFvDTom1V2v0XkcRSX07'
+    jwtSecret: process.env.JWT_SECRET
   }
 
   return mod
