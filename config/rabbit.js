@@ -3,7 +3,7 @@
 module.exports = (function () {
   const fs = require('fs')
 
-  const CA_CERT = '/etc/ssl/certs/st-ca.crt'
+  const CA_CERT = '/etc/rabbitmq/certs/st-ca.crt'
   const CLIENT_CERT = '/etc/telep/certs/stc-cert.pem'
   const CLIENT_KEY = '/etc/telep/private/stc-key.pem'
 
