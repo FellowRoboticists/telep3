@@ -15,7 +15,7 @@ BRANCH=master
 REPO_DIR=${DEPLOY_DIR}/repo
 SOURCE_DIR=${DEPLOY_DIR}/source
 PACKAGE_DIR=${DEPLOY_DIR}/packages
-BASE_DIR=/var/www/telep3
+BASE_DIR=/var/www/telep
 RELEASES_DIR=${BASE_DIR}/releases
 CURRENT_DIR=${BASE_DIR}/current
 REPOSITORY=git@github.com:FellowRoboticists/telep3.git
@@ -84,6 +84,10 @@ createPackage() {
 
   prepareNodeModules ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
 
+  prepareBowerComponents ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
+
+  runGulp ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
+
   createReleasePackage ${SOURCE_DIR} ${NAME} ${PACKAGE_DIR} ${packageName}
 }
 
@@ -95,4 +99,28 @@ fi
 if [ "${ACTION}" == create ]
 then
   createPackage ${packageName}
+fi
+
+if [ "${ACTION}" == copy ]
+then
+  if [ ! -f "${PACKAGE_DIR}/${packageName}" ]
+  then
+    createPackage ${packageName}
+  fi
+
+  releaseDir=$(releaseDirectory ${RELEASES_DIR})
+  copyReleasePackage ${PACKAGE_DIR} ${packageName} ${MACHINE} ${releaseDir}
+fi
+
+if [ "${ACTION}" == deploy ]
+then
+  startCommandCapture
+  queueCommand latestDir="\$(ls -tr ${RELEASES_DIR} | tail -1)"
+  queueCommand rm -f ${CURRENT_DIR}
+  queueCommand cd ${BASE_DIR} \&\& ln -s releases/\${latestDir} current
+  queueCommand sudo systemctl restart minion
+  queueCommand numDirs="\$(ls ${RELEASES_DIR} | wc -l)"
+  queueCommand "if [ \$numDirs -gt 5 ]; then numDel=\$((numDirs-5)); cd ${RELEASES_DIR} \&\& ls -t | tail -\${numDel} | xargs rm -f; fi"
+  invokeQueuedCommands ${MACHINE}
+  clearQueuedCommands
 fi

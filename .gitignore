@@ -45,3 +45,8 @@ public/js
 
 # Ignore general PDF files on principle
 *.pdf
+
+# Deploy stuff
+deploy/packages
+deploy/repo
+deploy/source
