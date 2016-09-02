@@ -82,11 +82,17 @@ createPackage() {
 
   prepareSource ${REPO_DIR} ${SOURCE_DIR} ${REPOSITORY} ${NAME} ${BRANCH}
 
-  prepareNodeModules ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
+  prepareNodeModules ${SOURCE_DIR} ${NAME} ${NODE_VERSION} development
 
   prepareBowerComponents ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
 
   runGulp ${SOURCE_DIR} ${NAME} ${NODE_VERSION}
+
+  # Now, we need to remove the node_modules directory; the only
+  # modules we installed were for dealing with bower/gulp. The
+  # production system doesn't need this nonsense so the package 
+  # can be much smaller.
+  rm -fr ${SOURCE_DIR}/${NAME}/node_modules
 
   createReleasePackage ${SOURCE_DIR} ${NAME} ${PACKAGE_DIR} ${packageName}
 }
@@ -110,6 +116,20 @@ then
 
   releaseDir=$(releaseDirectory ${RELEASES_DIR})
   copyReleasePackage ${PACKAGE_DIR} ${packageName} ${MACHINE} ${releaseDir}
+
+  # Unfortunately, we have to install the NPM modules 
+  # from the target machine. This may be significantly 
+  # slower, but given the typical architecture of the target
+  # machine, there really isn't a choice here.
+  #
+  # OK, so we had all kinds of problems trying to get this to work
+  # and all of it revolved around the fact that there was a 'system'
+  # nodeJs implementation on the target machine and it was picking 
+  # that node rather than the one we wanted. That's why we had to 
+  # set the PATH prior to invoking the command. Once I did that,
+  # it all started to work.
+  #
+  invokeRemoteCommand ${MACHINE} export PATH=/usr/local/node/bin:\$PATH \&\& cd ${releaseDir} \&\& /usr/local/node/bin/npm install --only=production
 fi
 
 if [ "${ACTION}" == deploy ]
